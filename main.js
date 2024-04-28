@@ -21,17 +21,18 @@ fs.readdir(targetDirectory, (err, files) => {
     if (supportedExtensions.includes(ext)) {
       mm.parseFile(filePath, { duration: true })
         .then(metadata => {
-          if (metadata.common.artist && metadata.common.album && metadata.common.track.no && metadata.common.title) {
+          if (metadata.common.artist && metadata.common.album && metadata.common.track.no && metadata.common.title && metadata.common.year) {
             const artist = metadata.common.artist;
             const album = metadata.common.album;
+            const year = metadata.common.year;
             const trackNumber = metadata.common.track.no;
             const title = metadata.common.title;
 
             // トラック番号を三桁のフォーマットで整形
             const formattedTrackNumber = trackNumber.toString().padStart(3, '0');
 
-            // 新しいファイル名の生成、拡張子は保持
-            const formattedOutput = `【${artist}】《${album}》_${formattedTrackNumber}_${title}${ext}`;
+            // 発売年をアルバム名の前に追加
+            const formattedOutput = `【${artist}】《${year} ${album}》_${formattedTrackNumber}_${title}${ext}`;
             const newFilePath = path.join(targetDirectory, formattedOutput);
 
             // ファイル名を変更
