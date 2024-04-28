@@ -27,8 +27,11 @@ fs.readdir(targetDirectory, (err, files) => {
             const trackNumber = metadata.common.track.no;
             const title = metadata.common.title;
 
+            // トラック番号を三桁のフォーマットで整形
+            const formattedTrackNumber = trackNumber.toString().padStart(3, '0');
+
             // 新しいファイル名の生成、拡張子は保持
-            const formattedOutput = `【${artist}】《${album}》_${trackNumber}_${title}${ext}`;
+            const formattedOutput = `【${artist}】《${album}》_${formattedTrackNumber}_${title}${ext}`;
             const newFilePath = path.join(targetDirectory, formattedOutput);
 
             // ファイル名を変更
