@@ -30,27 +30,30 @@ async function processDirectory(directory) {
 
 // ファイルを処理する関数
 async function processFile(filePath, ext) {
-  try {
-    const metadata = await mm.parseFile(filePath, { duration: true });
-    if (metadata.common.artist && metadata.common.track.no && metadata.common.title) {
-      const artist = metadata.common.artist;
-      const trackNumber = metadata.common.track.no;
-      const title = metadata.common.title;
-      const year = metadata.common.year || '';
-      const album = metadata.common.album ? `${year} ${metadata.common.album}` : '';
-
-      const formattedTrackNumber = trackNumber.toString().padStart(3, '0');
-      const albumPart = album ? `《${album}》` : '';
-      const formattedOutput = `【${artist}】${albumPart}_${formattedTrackNumber}_${title}${ext}`;
-      const newFilePath = path.join(outputDirectory, formattedOutput);
-
-      await fs.rename(filePath, newFilePath);
-      console.log(`Moved and renamed to: ${newFilePath}`);
+    try {
+      const metadata = await mm.parseFile(filePath, { duration: true });
+      if (metadata.common.artist && metadata.common.track.no && metadata.common.title) {
+        const artist = metadata.common.artist;
+        const trackNumber = metadata.common.track.no;
+        const title = metadata.common.title;
+        const year = metadata.common.year || '';
+        const album = metadata.common.album ? `${year} ${metadata.common.album}` : '';
+  
+        const formattedTrackNumber = trackNumber.toString().padStart(3, '0');
+        const albumPart = album ? `《${album}》` : '';
+        const formattedOutput = `【${artist}】${albumPart}_${formattedTrackNumber}_${title}${ext}`;
+        const newFilePath = path.join(outputDirectory, formattedOutput);
+  
+        await fs.rename(filePath, newFilePath);
+        console.log(`Moved and renamed to: ${newFilePath}`);
+      } else {
+        console.error('Missing required metadata:', filePath);
+      }
+    } catch (err) {
+      console.error('Error processing file:', filePath);
     }
-  } catch (err) {
-    console.error('Error processing file:', err);
   }
-}
+  
 
 // メイン処理を開始
 processDirectory(targetDirectory);
