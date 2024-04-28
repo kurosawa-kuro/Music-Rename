@@ -32,6 +32,11 @@ async function processFileIfNeeded(filePath) {
 async function processFile(filePath, ext) {
     try {
         const metadata = await mm.parseFile(filePath, { duration: true });
+        // Debug output for metadata comments
+        // if (metadata.common.comment) {
+        //     console.log(`Comment for ${filePath}:`, metadata.common.comment);
+        // }
+        
         if (isValidMetadata(metadata)) {
             const newFilePath = getNewFilePath(metadata, filePath, ext);
             await fs.rename(filePath, newFilePath);
