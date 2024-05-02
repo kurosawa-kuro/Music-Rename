@@ -4,8 +4,8 @@ const mm = require('music-metadata');
 
 const targetDirectory = 'C:\\Users\\kuros\\Downloads\\Music\\complete';
 const outputDirectory = 'C:\\Users\\kuros\\Downloads\\Music\\renamed';
-const missingMetadataDirectory = '【Missing required metadata】';
-const supportedExtensions = ['.mp3', '.flac', '.wav', '.ogg', '.m3u'];
+const missingMetadataDirectory = 'C:\\Users\\kuros\\Downloads\\Music\\【Missing required metadata】';
+const supportedExtensions = ['.mp3', '.flac', '.wav', '.ogg', '.m4a'];
 
 async function processDirectory(directory) {
   try {
@@ -55,17 +55,17 @@ async function getNewFilePath(metadata, filePath) {
   const formattedTrackNumber = track.no.toString().padStart(3, '0');
   const yearPart = year ? `${year} ` : '';
   const albumPart = album ? `《${yearPart}${album}》` : '';
+  const artistPart = `【${artist}】`;
   const artistFolder = path.join(outputDirectory, artist);
   await fs.mkdir(artistFolder, { recursive: true });
-  const formattedOutput = `${albumPart}_${formattedTrackNumber}_${title}${ext}`;
+  const formattedOutput = `${artistPart}${albumPart}_${formattedTrackNumber}_${title}${ext}`;
   return path.join(artistFolder, formattedOutput);
 }
 
 async function moveToMissingMetadataFolder(filePath) {
   const fileName = path.basename(filePath);
-  const missingFolder = path.join(outputDirectory, missingMetadataDirectory);
-  await fs.mkdir(missingFolder, { recursive: true });
-  const newFilePath = path.join(missingFolder, fileName);
+  await fs.mkdir(missingMetadataDirectory, { recursive: true });
+  const newFilePath = path.join(missingMetadataDirectory, fileName);
   await fs.rename(filePath, newFilePath);
 }
 
