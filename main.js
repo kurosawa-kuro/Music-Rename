@@ -36,8 +36,8 @@ async function processFile(filePath) {
       await fs.rename(filePath, newFilePath);
       console.log(`Moved and renamed to: ${newFilePath}`);
     } else {
-      await moveToMissingMetadataFolder(filePath);
       console.error('Missing required metadata', filePath);
+      await moveToMissingMetadataFolder(filePath);
     }
   } catch (err) {
     console.error('Error processing file:', filePath, err);
