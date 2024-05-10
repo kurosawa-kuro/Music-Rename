@@ -50,15 +50,16 @@ function isValidMetadata(metadata) {
 }
 
 async function getNewFilePath(metadata, filePath) {
-  const { artist, track, title, year, album } = metadata.common;
+  const { artist, track, title, year, album, genre } = metadata.common;
   const ext = path.extname(filePath);
-  const formattedTrackNumber = track.no.toString().padStart(3, '0');
+  const formattedTrackNumber = track.no.toString().padStart(2, '0');
   const yearPart = year ? `${year} ` : '';
   const albumPart = album ? `《${yearPart}${album}》` : '';
   const artistPart = `【${artist}】`;
+  const genrePart = genre ? `【${genre}】` : '【No Genre】';
   const artistFolder = path.join(outputDirectory, artist);
   await fs.mkdir(artistFolder, { recursive: true });
-  const formattedOutput = `${artistPart}${albumPart}_${formattedTrackNumber}_${title}${ext}`;
+  const formattedOutput = `${genrePart}${artistPart}${albumPart}_${formattedTrackNumber}_${title}${ext}`;
   return path.join(artistFolder, formattedOutput);
 }
 
